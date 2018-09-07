@@ -569,6 +569,7 @@ public class TransportProtocol implements SshMessageReader {
 
 			do {
 				msg = readMessage();
+				Log.debug(this, "read message:"+new String(msg));
 			} while (processMessage(msg));
 			return msg;
 		}

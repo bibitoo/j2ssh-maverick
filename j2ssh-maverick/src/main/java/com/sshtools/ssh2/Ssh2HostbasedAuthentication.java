@@ -108,7 +108,8 @@ public class Ssh2HostbasedAuthentication implements AuthenticationClient {
 			throw new SshException(
 					"Unexpected message returned from authentication protocol: "
 							+ reply[0], SshException.PROTOCOL_VIOLATION);
-		} catch (IOException ex) {
+		} catch (Exception ex) {
+			ex.printStackTrace();
 			throw new SshException(ex, SshException.INTERNAL_ERROR);
 		} finally {
 			try {

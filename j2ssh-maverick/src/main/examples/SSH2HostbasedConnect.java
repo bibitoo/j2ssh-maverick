@@ -23,6 +23,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.sshtools.logging.LoggerFactory;
+import com.sshtools.logging.LoggerLevel;
+import com.sshtools.logging.SimpleLogger;
 import com.sshtools.net.SocketTransport;
 import com.sshtools.publickey.SshPrivateKeyFile;
 import com.sshtools.publickey.SshPrivateKeyFileFactory;
@@ -51,7 +54,7 @@ public class SSH2HostbasedConnect {
 		try {
 
 			System.out.print("Hostname: ");
-			String hostname = reader.readLine();
+			String hostname = "66.42.44.175";//reader.readLine();
 
 			int idx = hostname.indexOf(':');
 			int port = 22;
@@ -61,9 +64,8 @@ public class SSH2HostbasedConnect {
 
 			}
 
-			System.out.print("Username [Enter for "
-					+ System.getProperty("user.name") + "]: ");
-			String username = reader.readLine();
+			System.out.print("Username [Enter for bibi]: ");
+			String username = "root";//reader.readLine();
 
 			if (username == null || username.trim().equals(""))
 				username = System.getProperty("user.name");
@@ -74,6 +76,7 @@ public class SSH2HostbasedConnect {
 			 * Create an SshConnector instance
 			 */
 			SshConnector con = SshConnector.createInstance();
+			LoggerFactory.setInstance(new SimpleLogger(LoggerLevel.DEBUG));
 
 			// Lets do some host key verification
 			HostKeyVerification hkv = new HostKeyVerification() {
@@ -108,12 +111,11 @@ public class SSH2HostbasedConnect {
 				// TODO This is 1.4 only - what effect will this have?
 
 				// pk.setClientHostname(java.net.InetAddress.getLocalHost().getCanonicalHostName());
-				pk.setClientHostname(java.net.InetAddress.getLocalHost()
-						.getHostName());
-				System.out.print("Private key file: ");
+				pk.setClientHostname(java.net.InetAddress.getLocalHost().getHostAddress());
+
 				SshPrivateKeyFile pkfile = SshPrivateKeyFileFactory
 						.parse(new FileInputStream(
-								"C:/Documents and Settings/lee/.ssh/id_rsa"));
+								"/home/sunz/.vps/keys/admin_66.42.44.175"));
 
 				SshKeyPair pair;
 				if (pkfile.isPassphraseProtected()) {
@@ -126,7 +128,7 @@ public class SSH2HostbasedConnect {
 				pk.setPublicKey(pair.getPublicKey());
 			} while (ssh.authenticate(pk) != SshAuthentication.COMPLETE
 					&& ssh.isConnected());
-
+//				ssh.authenticate(pk);
 			/**
 			 * Start a session and do basic IO
 			 */
